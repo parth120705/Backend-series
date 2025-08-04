@@ -16,6 +16,7 @@ const registerUser=asyncHandler(async(req,res)=>{
     //return res
 
     const{username,fullname,email,password}=req.body;
+    console.log({username , fullname , email , password});
     if(
         [username,fullname,email,password].some((feild)=>feild?.trim()=="")
     ){
@@ -28,8 +29,19 @@ const registerUser=asyncHandler(async(req,res)=>{
     if(existingUser){
         throw new ApiError(409,"User with this username or email already exist")
     }
-    const avatarLocalPath=req.files?.avatar[0]?.path
-    const coverImageLocalPath=req.files?.coverImage[0]?.path
+    
+        console.log(req.files)
+        const avatarLocalPath = req.files?.avatar[0]?.path;
+        // let avatarLocalPath="";
+        // if(req.files && Array.isArray(req.files.avatar)&& req.files.avatar.length>0) {
+        //     coverImageLocalPath=req.files.avatar[0].path
+        // }
+
+    //const coverImageLocalPath=req.files?.coverImage[0]?.path
+    let coverImageLocalPath="";
+    if(req.files && Array.isArray(req.files.coverImage)&& req.files.coverImage.length>0) {
+        coverImageLocalPath=req.files.coverImage[0].path
+    }
 
     if(!avatarLocalPath){
         throw new ApiError(400,"avatar file is required")
@@ -59,3 +71,32 @@ const registerUser=asyncHandler(async(req,res)=>{
 })
 
 export {registerUser}
+
+//req.files wala code
+
+/*{
+  avatar: [
+    {
+      fieldname: 'avatar',
+      originalname: 'Screenshot 2024-07-09 at 7.53.23 PM.png',
+      encoding: '7bit',
+      mimetype: 'image/png',
+      destination: './public/temp',
+      filename: 'Screenshot 2024-07-09 at 7.53.23 PM.png',
+      path: 'public/temp/Screenshot 2024-07-09 at 7.53.23 PM.png',
+      size: 2618055
+    }
+  ],
+  coverImage: [
+    {
+      fieldname: 'coverImage',
+      originalname: 'Screenshot 2024-07-02 at 3.13.34 PM.png',
+      encoding: '7bit',
+      mimetype: 'image/png',
+      destination: './public/temp',
+      filename: 'Screenshot 2024-07-02 at 3.13.34 PM.png',
+      path: 'public/temp/Screenshot 2024-07-02 at 3.13.34 PM.png',
+      size: 1181694
+    }
+  ]
+}*/ 
